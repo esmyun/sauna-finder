@@ -29,10 +29,10 @@
 <section id="conditions" class="screen">
   <div class="top"><button class="back" onclick="show('home')">‹</button><div class="brand">SAUNA FINDER</div><div></div></div>
   <h2 class="section-title">今日、どこでととのう？</h2>
-  <div class="hint">条件を選んでも、今の気分を自由に書いてもOK。AI推薦は次の実装で接続します。</div>
+  <div class="hint">条件を選んでも、今の気分を自由に書いてもOK。Web上の情報からサウナ施設を探して、条件との相性を判定します。</div>
   <div class="condition"><label>💭 今の気分</label>
     <div class="input" id="moodInput" style="border:1px solid #d4e0e8;color:#7891a6;margin-bottom:10px" contenteditable="true">例：仕事で疲れた。静かで外気浴が気持ちいいところ。</div>
-    <div class="hint" style="margin:0">※現在は入力内容を保存するだけのMVPです。</div>
+    <div class="hint" style="margin:0">※今の気分も検索条件として使います。</div>
   </div><h2 class="section-title">好みを選ぶ</h2><div class="hint">気になる条件だけ選べばOK。選ばない項目は「こだわらない」として扱います。</div>
 
   <div class="condition"><label>📍 エリア</label><div class="chips" data-k="area">
@@ -113,37 +113,79 @@ async function search(){
  const query = buildQuery();
  try {
    const r = await fetch("/api/search", {method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({query})});
-   if(!r.ok) throw new Error("search api unavailable");
    const data = await r.json();
-   if(!data.results || !data.results.length) throw new Error("no results");
-   document.getElementById("resultList").innerHTML = liveCards(data.results);
+   if(!r.ok) throw new Error(data?.error || "search api unavailable");
+   if(!data.results || !data.results.length) throw new Error("no facility results");
+   const rows=data.results.map(x=>({...x, score:liveMatch(x)})).sort((a,b)=>b.score-a.score);
+   document.getElementById("resultList").innerHTML = liveCards(rows);
    show("results");
  } catch(e) {
    const rows=facilities.map(f=>({...f,score:match(f)})).sort((a,b)=>b.score-a.score).slice(0,5);
    document.getElementById("resultList").innerHTML =
-     '<div class="live-status">現在は検索API未接続のため、試作用データを表示しています。</div>' +
+     '<div class="live-status">Web検索で施設情報を取得できなかったため、試作用データを表示しています。</div>' +
      rows.map((f,i)=>card(f,i)).join("");
    show("results");
  }
 }
 function buildQuery(){
  const parts=[
-  selected("area"), "サウナ",
+  selected("area"), "サウナ施設",
   selected("heat"), selected("cold"),
   selected("type"), selected("löyly"), selected("air"), selected("mood"), selected("price"),
   document.getElementById("moodInput")?.innerText || ""
  ];
  return parts.filter(x=>x && !["こだわらない","どちらでも"].includes(x)).join(" ");
 }
+function liveMatch(f){
+ let score=58;
+ const heat=selected("heat"),cold=selected("cold"),type=selected("type"),air=selected("air"),mood=selected("mood"),price=selected("price"),loyly=selected("löyly");
+ if(heat!=="こだわらない" && f.heat!=null){
+   if(heat==="90℃未満"&&f.heat<90)score+=10;
+   else if(heat==="90〜99℃"&&f.heat>=90&&f.heat<100)score+=10;
+   else if(heat==="100℃以上"&&f.heat>=100)score+=10;
+   else score-=4;
+ }
+ if(cold!=="こだわらない" && f.cold!=null){
+   if(cold==="9℃以下（シングル）"&&f.cold<=9)score+=10;
+   else if(cold==="10〜15℃"&&f.cold>=10&&f.cold<=15)score+=10;
+   else if(cold==="16〜22℃"&&f.cold>=16&&f.cold<=22)score+=10;
+   else if(cold==="22℃以上"&&f.cold>=22)score+=10;
+   else score-=4;
+ }
+ if(type!=="どちらでも" && f.type && f.type!=="不明") score += ((type==="乾式（ドライ）"&&f.type==="乾式")||(type==="湿式（スチーム・ミスト）"&&f.type==="湿式"))?6:-2;
+ if(air==="必須") score += f.outdoor?10:-8;
+ else if(air==="あれば嬉しい" && f.outdoor) score+=5;
+ if(price!=="気にしない" && f.price!=null){const n=+price.replace(/[^\d]/g,"");score += f.price<=n?6:-5;}
+ if(loyly!=="こだわらない" && f.loyly?.includes(loyly)) score+=6;
+ if(mood==="静か" && /静か|落ち着い|黙浴|ソロ/i.test(f.snippet||"")) score+=5;
+ return Math.max(50,Math.min(98,score));
+}
 function liveCards(rows){
  return rows.slice(0,8).map((r,i)=>{
-   const title=r.title||"サウナ施設";
+   const name=r.name||"サウナ施設";
    const url=r.url||"#";
-   const snippet=r.content||r.snippet||"Web検索で見つかった候補です。";
-   const q=encodeURIComponent(title);
-   return `<article class="result"><div class="result-head"><span class="rank">${["🥇","🥈","🥉","④","⑤","⑥","⑦","⑧"][i]} WEB MATCH</span><span class="score">候補</span></div><div class="name">${escapeHtml(title)}</div><p class="why">${escapeHtml(snippet)}</p><a class="map" target="_blank" href="https://www.google.com/maps/search/?api=1&query=${q}">📍 Googleマップで探す</a><div class="sources"><a target="_blank" href="${url}">🔎 情報元を開く</a></div></article>`;
+   const q=encodeURIComponent(name);
+   const tags=[];
+   if(r.heat!=null)tags.push(`🔥 ${r.heat}℃`);
+   if(r.cold!=null)tags.push(`🧊 ${r.cold}℃`);
+   if(r.type && r.type!=="不明")tags.push(r.type);
+   if(r.outdoor)tags.push("🌿 外気浴あり");
+   if(r.price!=null)tags.push(`💰 ${r.price.toLocaleString()}円〜`);
+   if(r.loyly?.length)tags.push(`💨 ${r.loyly.join("・")}`);
+   const snippet=r.snippet||"Web上の施設情報から候補として見つかりました。";
+   return `<article class="result"><div class="result-head"><span class="rank">${["🥇","🥈","🥉","④","⑤","⑥","⑦","⑧"][i]} MATCH</span><span class="score">相性 ${r.score}%</span></div><div class="name">${escapeHtml(name)}</div><div class="area">Web検索から抽出した施設情報</div><div class="tags">${tags.map(t=>`<span class="tag">${escapeHtml(t)}</span>`).join("") || '<span class="tag">施設情報を確認中</span>'}</div><p class="why">${escapeHtml(makeWhy(r))}</p><a class="map" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query=${q}">📍 ${escapeHtml(name)}をGoogleマップで見る</a><div class="sources"><a target="_blank" rel="noopener" href="${escapeAttr(url)}">🔎 情報元を開く</a></div></article>`;
  }).join("");
 }
+function makeWhy(r){
+ const reasons=[];
+ if(r.heat!=null)reasons.push(`サウナは${r.heat}℃`);
+ if(r.cold!=null)reasons.push(`水風呂は${r.cold}℃`);
+ if(r.outdoor)reasons.push("外気浴あり");
+ if(r.loyly?.length)reasons.push(r.loyly.join("・"));
+ if(r.price!=null)reasons.push(`料金情報は${r.price.toLocaleString()}円〜`);
+ return reasons.length ? reasons.join("・")+"。検索条件との相性をもとに候補化しています。" : "検索条件に関連するサウナ施設として見つかりました。詳しい設備・料金は情報元で確認できます。";
+}
+function escapeAttr(x){return escapeHtml(x).replace(/`/g,"&#096;")}
 function escapeHtml(x){return String(x).replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]))}
 function card(f,i){
  const key=f.name.replace(/\W/g,"");const liked=state.fav.includes(f.name);
