@@ -2,20 +2,51 @@ export default async function handler(req, res) {
   if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
   const key = process.env.TAVILY_API_KEY;
   if (!key) return res.status(500).json({ error: 'TAVILY_API_KEY is not configured' });
+
   try {
     const body = typeof req.body === 'string' ? JSON.parse(req.body) : (req.body || {});
     const query = String(body.query || '').trim();
     if (!query) return res.status(400).json({ error: 'query is required' });
-    const searchQuery = `${query} サウナ施設 店舗名 営業時間 料金 水風呂 外気浴`;
-    const response = await fetch('https://api.tavily.com/search', {
-      method: 'POST', headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ api_key: key, query: searchQuery, search_depth: 'basic', max_results: 10, include_answer: true, include_raw_content: false })
+
+    // 1回の検索だけだと記事ページに結果が偏るため、切り口を変えて3回検索する。
+    // 施設候補を増やしつつ、最後に厳格な施設判定を通す。
+    const queries = [
+      `${query} サウナ施設 店舗名 公式 料金 営業時間`,
+      `${query} サウナ 施設 住所 水風呂 外気浴 ロウリュ`,
+      `${query} サウナ 公式サイト 店舗 施設名`
+    ];
+
+    const responses = await Promise.all(queries.map(q => fetch('https://api.tavily.com/search', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        api_key: key,
+        query: q,
+        search_depth: 'basic',
+        max_results: 10,
+        include_answer: false,
+        include_raw_content: false
+      })
+    })));
+
+    for (const r of responses) {
+      if (!r.ok) return res.status(r.status).json({ error: 'Tavily request failed' });
+    }
+
+    const payloads = await Promise.all(responses.map(r => r.json()));
+    const rows = payloads.flatMap(d => Array.isArray(d.results) ? d.results : []);
+    const candidates = buildCandidates(rows);
+
+    return res.status(200).json({
+      query,
+      searchCount: queries.length,
+      results: candidates
     });
-    if (!response.ok) return res.status(response.status).json({ error: 'Tavily request failed' });
-    const data = await response.json();
-    return res.status(200).json({ query, answer: data.answer || '', results: buildCandidates(Array.isArray(data.results) ? data.results : []) });
-  } catch (error) { return res.status(500).json({ error: 'Search failed', detail: error?.message || String(error) }); }
+  } catch (error) {
+    return res.status(500).json({ error: 'Search failed', detail: error?.message || String(error) });
+  }
 }
+
 function buildCandidates(rows) {
   const seen = new Set(), out = [];
   for (const row of rows) {

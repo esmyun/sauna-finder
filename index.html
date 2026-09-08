@@ -6,7 +6,7 @@
 <meta name="theme-color" content="#69abe0">
 <title>Sauna Finder</title>
 <style>
-*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:#eef8fd;color:#315c88;font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Yu Gothic",sans-serif}.app{max-width:720px;margin:auto;min-height:100vh;background:linear-gradient(#bfe0f8,#edf8fd 35%,#fff 78%);position:relative;overflow:hidden}.screen{display:none;padding:20px 18px 42px;min-height:100vh}.screen.active{display:block}.top{display:flex;justify-content:space-between;align-items:center;margin:4px 2px 20px}.back{border:0;background:rgba(255,255,255,.7);border-radius:50%;width:42px;height:42px;color:#315c88;font-size:22px}.brand{font-size:15px;letter-spacing:.12em;font-weight:700}.menu{border:0;background:transparent;font-size:27px;color:#fff}.hero{text-align:center;padding:52px 0 40px}.steam{font-size:42px;letter-spacing:8px;color:#4d91ca}.hero h1{font-size:38px;font-weight:500;margin:10px 0;color:#326b9e}.sub{font-family:"Hiragino Mincho ProN","Yu Mincho",serif;letter-spacing:.14em}.glass{background:rgba(255,255,255,.74);backdrop-filter:blur(16px);border:1px solid rgba(255,255,255,.85);border-radius:26px;padding:20px;box-shadow:0 14px 45px rgba(67,126,170,.12)}.location{text-align:center;font-family:"Hiragino Mincho ProN","Yu Mincho",serif;font-size:18px;margin-bottom:14px}.input{height:56px;border-radius:30px;background:#fff;display:flex;align-items:center;padding:0 18px;color:#98aabd}.input span:last-child{font-size:15px}.cta{width:100%;height:58px;border:0;border-radius:30px;background:linear-gradient(100deg,#69abe0,#377fbe);color:#fff;font-size:18px;font-weight:700;margin-top:12px}.quick{display:grid;grid-template-columns:repeat(4,1fr);margin-top:18px}.quick div{text-align:center;border-right:1px solid #c9d9e4;font-size:11px}.quick div:last-child{border:0}.qi{display:block;font-size:23px;margin-bottom:4px}.message{text-align:center;font-family:"Hiragino Mincho ProN","Yu Mincho",serif;margin:48px 0 20px}.message h2{font-size:24px;font-weight:500}.message p{line-height:2;font-size:13px}.section-title{font-size:25px;font-family:"Hiragino Mincho ProN","Yu Mincho",serif;margin:10px 0 4px}.hint{font-size:12px;color:#7891a6;margin-bottom:18px}.condition{background:rgba(255,255,255,.82);border-radius:20px;padding:17px;margin:11px 0;box-shadow:0 5px 18px rgba(67,126,170,.07)}.condition label{display:block;font-weight:700;margin-bottom:10px}.chips{display:flex;flex-wrap:wrap;gap:8px}.chip{border:1px solid #d4e0e8;background:#fff;color:#476b89;border-radius:999px;padding:9px 11px;font-size:13px}.chip.active{background:#397fba;color:#fff;border-color:#397fba}.primary{width:100%;border:0;border-radius:16px;padding:15px;background:#315f89;color:#fff;font-size:16px;font-weight:700;margin-top:10px}.secondary{width:100%;border:1px solid #bdd3e2;border-radius:16px;padding:13px;background:#fff;color:#315c88;font-weight:700;margin-top:8px}.loading{text-align:center;padding:75px 20px}.loader{font-size:48px;animation:float 1.5s infinite}@keyframes float{50%{transform:translateY(-8px)}}.result{background:#fff;border-radius:22px;padding:17px;margin:12px 0;box-shadow:0 7px 25px rgba(67,126,170,.09)}.result-head{display:flex;justify-content:space-between}.rank{font-size:12px;color:#7891a6}.score{font-weight:800;color:#377fbe}.name{font-size:20px;font-weight:800;color:#2d587f;margin:5px 0}.area{font-size:12px;color:#7c91a3}.tags{display:flex;flex-wrap:wrap;gap:6px;margin:11px 0}.tag{font-size:11px;background:#edf5f9;border-radius:8px;padding:6px 8px}.why{font-size:13px;line-height:1.6;color:#526d83}.map{display:block;text-align:center;text-decoration:none;background:#315f89;color:#fff;border-radius:12px;padding:12px;margin-top:12px;font-weight:700}.fav{border:1px solid #c7dbe8;background:#fff;color:#315c88;border-radius:12px;padding:10px;width:100%;margin-top:8px;font-weight:700}.empty{background:#fff;border-radius:20px;padding:25px;text-align:center;color:#6c8497}.detail{background:#fff;border-radius:22px;padding:20px}.bigscore{font-size:34px;font-weight:800;color:#377fbe}.grid{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin:15px 0}.metric{background:#f2f8fb;border-radius:13px;padding:12px}.metric small{display:block;color:#8094a4;font-size:11px}.metric b{font-size:15px}.footer{text-align:center;letter-spacing:.3em;font-size:10px;padding:25px;color:#5b82a2}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:#eef8fd;color:#315c88;font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Yu Gothic",sans-serif}button,a{cursor:pointer;-webkit-tap-highlight-color:transparent}button,.map{transition:background .2s ease,color .2s ease,border-color .2s ease,box-shadow .2s ease,transform .15s ease}button:active,.map:active{transform:scale(.98)}button:focus-visible,a:focus-visible{outline:3px solid rgba(55,127,190,.35);outline-offset:2px}.cta:hover{background:linear-gradient(100deg,#5b9fd6,#2f73ae);box-shadow:0 8px 20px rgba(55,127,190,.22);transform:translateY(-2px)}.primary:hover{background:#284f75;box-shadow:0 8px 18px rgba(49,95,137,.2);transform:translateY(-2px)}.secondary:hover{background:#eef7fc;border-color:#7fb1d4;box-shadow:0 6px 16px rgba(67,126,170,.12);transform:translateY(-2px)}.chip:hover{background:#e8f3fa;border-color:#8db9d6;color:#315f89;transform:translateY(-1px)}.chip.active:hover{background:#2f73ae;border-color:#2f73ae;color:#fff}.back:hover{background:#fff;box-shadow:0 6px 16px rgba(67,126,170,.15);transform:translateY(-2px)}.menu:hover{color:#315f89;transform:scale(1.05)}.map:hover{background:#284f75;box-shadow:0 8px 18px rgba(49,95,137,.2);transform:translateY(-2px)}.fav:hover{background:#f0f8fc;border-color:#8db9d6;box-shadow:0 6px 16px rgba(67,126,170,.12);transform:translateY(-2px)}.app{max-width:720px;margin:auto;min-height:100vh;background:linear-gradient(#bfe0f8,#edf8fd 35%,#fff 78%);position:relative;overflow:hidden}.screen{display:none;padding:20px 18px 42px;min-height:100vh}.screen.active{display:block}.top{display:flex;justify-content:space-between;align-items:center;margin:4px 2px 20px}.back{border:0;background:rgba(255,255,255,.7);border-radius:50%;width:42px;height:42px;color:#315c88;font-size:22px}.brand{font-size:15px;letter-spacing:.12em;font-weight:700}.menu{border:0;background:transparent;font-size:27px;color:#fff}.hero{text-align:center;padding:52px 0 40px}.steam{font-size:42px;letter-spacing:8px;color:#4d91ca}.hero h1{font-size:38px;font-weight:500;margin:10px 0;color:#326b9e}.sub{font-family:"Hiragino Mincho ProN","Yu Mincho",serif;letter-spacing:.14em}.glass{background:rgba(255,255,255,.74);backdrop-filter:blur(16px);border:1px solid rgba(255,255,255,.85);border-radius:26px;padding:20px;box-shadow:0 14px 45px rgba(67,126,170,.12)}.location{text-align:center;font-family:"Hiragino Mincho ProN","Yu Mincho",serif;font-size:18px;margin-bottom:14px}.input{height:56px;border-radius:30px;background:#fff;display:flex;align-items:center;padding:0 18px;color:#98aabd}.input span:last-child{font-size:15px}.cta{width:100%;height:58px;border:0;border-radius:30px;background:linear-gradient(100deg,#69abe0,#377fbe);color:#fff;font-size:18px;font-weight:700;margin-top:12px}.quick{display:grid;grid-template-columns:repeat(4,1fr);margin-top:18px}.quick div{text-align:center;border-right:1px solid #c9d9e4;font-size:11px}.quick div:last-child{border:0}.qi{display:block;font-size:23px;margin-bottom:4px}.message{text-align:center;font-family:"Hiragino Mincho ProN","Yu Mincho",serif;margin:48px 0 20px}.message h2{font-size:24px;font-weight:500}.message p{line-height:2;font-size:13px}.section-title{font-size:25px;font-family:"Hiragino Mincho ProN","Yu Mincho",serif;margin:10px 0 4px}.hint{font-size:12px;color:#7891a6;margin-bottom:18px}.condition{background:rgba(255,255,255,.82);border-radius:20px;padding:17px;margin:11px 0;box-shadow:0 5px 18px rgba(67,126,170,.07)}.condition label{display:block;font-weight:700;margin-bottom:10px}.chips{display:flex;flex-wrap:wrap;gap:8px}.chip{border:1px solid #d4e0e8;background:#fff;color:#476b89;border-radius:999px;padding:9px 11px;font-size:13px}.chip.active{background:#397fba;color:#fff;border-color:#397fba}.primary{width:100%;border:0;border-radius:16px;padding:15px;background:#315f89;color:#fff;font-size:16px;font-weight:700;margin-top:10px}.secondary{width:100%;border:1px solid #bdd3e2;border-radius:16px;padding:13px;background:#fff;color:#315c88;font-weight:700;margin-top:8px}.loading{text-align:center;padding:75px 20px}.loader{font-size:48px;animation:float 1.5s infinite}@keyframes float{50%{transform:translateY(-8px)}}.result{background:#fff;border-radius:22px;padding:17px;margin:12px 0;box-shadow:0 7px 25px rgba(67,126,170,.09)}.result-head{display:flex;justify-content:space-between}.rank{font-size:12px;color:#7891a6}.score{font-weight:800;color:#377fbe}.name{font-size:20px;font-weight:800;color:#2d587f;margin:5px 0}.area{font-size:12px;color:#7c91a3}.tags{display:flex;flex-wrap:wrap;gap:6px;margin:11px 0}.tag{font-size:11px;background:#edf5f9;border-radius:8px;padding:6px 8px}.why{font-size:13px;line-height:1.6;color:#526d83}.map{display:block;text-align:center;text-decoration:none;background:#315f89;color:#fff;border-radius:12px;padding:12px;margin-top:12px;font-weight:700}.fav{border:1px solid #c7dbe8;background:#fff;color:#315c88;border-radius:12px;padding:10px;width:100%;margin-top:8px;font-weight:700}.empty{background:#fff;border-radius:20px;padding:25px;text-align:center;color:#6c8497}.detail{background:#fff;border-radius:22px;padding:20px}.bigscore{font-size:34px;font-weight:800;color:#377fbe}.grid{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin:15px 0}.metric{background:#f2f8fb;border-radius:13px;padding:12px}.metric small{display:block;color:#8094a4;font-size:11px}.metric b{font-size:15px}.search-choice{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:18px}.choice{border:1px solid rgba(255,255,255,.9);background:rgba(255,255,255,.82);border-radius:20px;padding:20px 14px;text-align:left;color:#315c88;box-shadow:0 7px 22px rgba(67,126,170,.09);transition:background .2s ease,color .2s ease,border-color .2s ease,box-shadow .2s ease,transform .15s ease}.choice:hover{background:#eaf6fc;border-color:#8db9d6;box-shadow:0 10px 22px rgba(67,126,170,.16);transform:translateY(-2px)}.choice:active{transform:scale(.98)}.choice .icon{font-size:27px;display:block;margin-bottom:9px}.choice strong{display:block;font-size:15px}.choice small{display:block;font-size:11px;color:#7891a6;line-height:1.5;margin-top:5px}.textarea{width:100%;min-height:145px;border:1px solid #d4e0e8;border-radius:18px;background:#fff;padding:16px;font:inherit;font-size:15px;color:#315c88;resize:vertical;outline:none}.textarea:focus{border-color:#7fb1d4;box-shadow:0 0 0 3px rgba(55,127,190,.1)}.mode-label{display:inline-block;font-size:11px;background:#edf5f9;border-radius:999px;padding:6px 9px;color:#397fba;margin-bottom:8px}.footer{text-align:center;letter-spacing:.3em;font-size:10px;padding:25px;color:#5b82a2}
 </style>
 <style>
 .live-status{font-size:12px;color:#6f8799;margin:10px 0;text-align:center}.sources{margin-top:12px;padding-top:10px;border-top:1px solid #e4edf3}.sources a{display:block;color:#397fba;font-size:12px;margin:5px 0;text-decoration:none}
@@ -18,8 +18,11 @@
   <div class="hero"><div class="steam">〰〰〰</div><h1>今日、どこでととのう？</h1><div class="sub">あなたにぴったりのサウナを見つけよう。</div></div>
   <div class="glass">
     <div class="location">♨️ 今日のととのいを探そう</div>
-    <div class="input"><span style="font-size:25px;margin-right:12px">⌕</span><span>エリア・駅名・地名を入力</span></div>
-    <button class="cta" onclick="show('conditions')">条件から探す　→</button><button class="secondary" onclick="show('conditions');setTimeout(()=>document.querySelector('[data-k=&quot;mood&quot;]')?.scrollIntoView({behavior:'smooth'}),50)">今の気分から探す　→</button>
+    <div class="location" style="margin-top:4px">どう探す？</div>
+    <div class="search-choice">
+      <button class="choice" onclick="startMode('conditions')"><span class="icon">🔎</span><strong>条件から探す</strong><small>温度・水風呂・外気浴など<br>こだわりを選んで探す</small></button>
+      <button class="choice" onclick="startMode('mood')"><span class="icon">💭</span><strong>文章から探す</strong><small>今の気分や目的を自由に書いて<br>サウナを探す</small></button>
+    </div>
     <div class="quick"><div><span class="qi">♨</span>温度で探す</div><div><span class="qi">❄</span>水風呂で探す</div><div><span class="qi">♧</span>こだわり条件</div><div><span class="qi">⌖</span>地図から探す</div></div>
   </div>
   <div class="message"><h2>サウナがある、いい暮らし。</h2><p>行きたいサウナが、きっと見つかる。<br>あなたにぴったりの“ととのい”を、Sauna Finderで。</p></div>
@@ -29,11 +32,8 @@
 <section id="conditions" class="screen">
   <div class="top"><button class="back" onclick="show('home')">‹</button><div class="brand">SAUNA FINDER</div><div></div></div>
   <h2 class="section-title">今日、どこでととのう？</h2>
-  <div class="hint">条件を選んでも、今の気分を自由に書いてもOK。Web上の情報からサウナ施設を探して、条件との相性を判定します。</div>
-  <div class="condition"><label>💭 今の気分</label>
-    <div class="input" id="moodInput" style="border:1px solid #d4e0e8;color:#7891a6;margin-bottom:10px" contenteditable="true">例：仕事で疲れた。静かで外気浴が気持ちいいところ。</div>
-    <div class="hint" style="margin:0">※今の気分も検索条件として使います。</div>
-  </div><h2 class="section-title">好みを選ぶ</h2><div class="hint">気になる条件だけ選べばOK。選ばない項目は「こだわらない」として扱います。</div>
+  <div class="mode-label">🔎 条件検索</div><div class="hint">サウナの好みを選んで、条件に合う施設を探します。</div>
+  <h2 class="section-title">こだわりを選ぶ</h2><div class="hint">気になる条件だけ選べばOK。選ばない項目は「こだわらない」として扱います。</div>
 
   <div class="condition"><label>📍 エリア</label><div class="chips" data-k="area">
     <button class="chip active">東京23区</button><button class="chip">東京23区外</button><button class="chip">神奈川</button><button class="chip">埼玉</button><button class="chip">千葉</button>
@@ -59,7 +59,23 @@
   <div class="condition"><label>💰 料金</label><div class="chips" data-k="price">
     <button class="chip active">〜1,500円</button><button class="chip">〜2,500円</button><button class="chip">〜4,000円</button><button class="chip">気にしない</button>
   </div></div>
-  <button class="primary" onclick="search()">🔍 この条件で探す</button>
+  <button class="primary" onclick="search('conditions')">🔍 この条件で探す</button>
+  <button class="secondary" onclick="show('home')">戻る</button>
+</section>
+
+<section id="moodSearch" class="screen">
+  <div class="top"><button class="back" onclick="show('home')">‹</button><div class="brand">SAUNA FINDER</div><div></div></div>
+  <h2 class="section-title">今の気分から探す</h2>
+  <div class="mode-label">💭 文章検索</div>
+  <div class="hint">今日はどんな気分？思ったまま書いてください。文章を検索条件としてWeb上のサウナ施設を探します。</div>
+  <div class="condition">
+    <label>💭 今の気分・目的</label>
+    <textarea id="moodInput" class="textarea" placeholder="例：仕事で疲れた。静かで外気浴が気持ちいいところで、ゆっくりととのいたい。"></textarea>
+  </div>
+  <div class="condition"><label>📍 エリア</label><div class="chips" data-k="moodArea">
+    <button class="chip active">東京23区</button><button class="chip">東京23区外</button><button class="chip">神奈川</button><button class="chip">埼玉</button><button class="chip">千葉</button>
+  </div></div>
+  <button class="primary" onclick="search('mood')">💭 この気分で探す</button>
   <button class="secondary" onclick="show('home')">戻る</button>
 </section>
 
@@ -91,7 +107,7 @@ const facilities=[
  {name:"サンプルサウナ E",area:"埼玉",heat:88,cold:18,type:"湿式",löyly:[],air:false,mood:"普通",price:1200,address:"埼玉県さいたま市",why:"マイルドな温度帯と手頃な料金。高温が苦手な人にも候補になります。"}
 ];
 
-const state={fav:JSON.parse(localStorage.getItem("sfav")||"[]")};
+const state={fav:JSON.parse(localStorage.getItem("sfav")||"[]"),mode:"conditions"};
 function show(id){document.querySelectorAll(".screen").forEach(x=>x.classList.remove("active"));document.getElementById(id).classList.add("active");window.scrollTo(0,0)}
 document.querySelectorAll(".chips").forEach(group=>group.addEventListener("click",e=>{if(!e.target.classList.contains("chip"))return;group.querySelectorAll(".chip").forEach(x=>x.classList.remove("active"));e.target.classList.add("active")}));
 function selected(k){const g=document.querySelector(`.chips[data-k="${k}"]`);return g?.querySelector(".chip.active")?.textContent||"こだわらない"}
@@ -108,35 +124,56 @@ function match(f){
  if(löyly!=="こだわらない"&&f.löyly.includes(löyly))score+=5;
  return Math.max(55,Math.min(99,score));
 }
-async function search(){
- show("loading");
- const query = buildQuery();
+function startMode(mode){
+  if(mode==='mood'){
+    const input=document.getElementById('moodInput');
+    if(input) input.value='';
+    show('moodSearch');
+  } else {
+    show('conditions');
+  }
+}
+async function search(mode='conditions'){
+ state.mode=mode;
+ show('loading');
+ const query = mode==='mood' ? buildMoodQuery() : buildConditionQuery();
  try {
-   const r = await fetch("/api/search", {method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({query})});
+   const r = await fetch('/api/search', {method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({query,mode})});
    const data = await r.json();
-   if(!r.ok) throw new Error(data?.error || "search api unavailable");
-   if(!data.results || !data.results.length) throw new Error("no facility results");
+   if(!r.ok) throw new Error(data?.error || 'search api unavailable');
+   if(!data.results || !data.results.length) throw new Error('no facility results');
    const rows=data.results.map(x=>({...x, score:liveMatch(x)})).sort((a,b)=>b.score-a.score);
-   document.getElementById("resultList").innerHTML = liveCards(rows);
-   show("results");
+   document.getElementById('resultList').innerHTML = liveCards(rows);
+   document.querySelector('#results .hint').textContent = mode==='mood' ? '入力した文章をもとに、関連性の高い施設を表示しています。' : '選択した条件との相性が高い順に表示しています。';
+   show('results');
  } catch(e) {
    const rows=facilities.map(f=>({...f,score:match(f)})).sort((a,b)=>b.score-a.score).slice(0,5);
-   document.getElementById("resultList").innerHTML =
+   document.getElementById('resultList').innerHTML =
      '<div class="live-status">Web検索で施設情報を取得できなかったため、試作用データを表示しています。</div>' +
-     rows.map((f,i)=>card(f,i)).join("");
-   show("results");
+     rows.map((f,i)=>card(f,i)).join('');
+   show('results');
  }
 }
-function buildQuery(){
- const parts=[
-  selected("area"), "サウナ施設",
-  selected("heat"), selected("cold"),
-  selected("type"), selected("löyly"), selected("air"), selected("mood"), selected("price"),
-  document.getElementById("moodInput")?.innerText || ""
- ];
- return parts.filter(x=>x && !["こだわらない","どちらでも"].includes(x)).join(" ");
+function buildConditionQuery(){
+ const parts=[selected('area'), 'サウナ施設', selected('heat'), selected('cold'), selected('type'), selected('löyly'), selected('air'), selected('mood'), selected('price')];
+ return parts.filter(x=>x && !['こだわらない','どちらでも'].includes(x)).join(' ');
+}
+function buildMoodQuery(){
+ const mood=document.getElementById('moodInput')?.value?.trim() || '';
+ const area=selected('moodArea');
+ return [area,'サウナ施設',mood,'サウナ 水風呂 外気浴 料金'].filter(Boolean).join(' ');
 }
 function liveMatch(f){
+ if(state.mode==='mood'){
+   let score=70;
+   const text=(document.getElementById('moodInput')?.value||'')+' '+(f.snippet||'');
+   if(/静か|落ち着|黙浴|ひとり|ソロ/i.test(text)) score += /静か|落ち着|黙浴|ひとり|ソロ/i.test(f.snippet||'') ? 8 : 0;
+   if(/外気浴|外で|風|外気/i.test(text)) score += f.outdoor ? 10 : -4;
+   if(/冷たい|キンキン|シングル|水風呂/i.test(text) && f.cold!=null) score += f.cold<=15 ? 7 : 0;
+   if(/高温|熱い|ガッツリ|汗/i.test(text) && f.heat!=null) score += f.heat>=90 ? 7 : 0;
+   if(/安い|手頃|1500|2000|2500/i.test(text) && f.price!=null) score += f.price<=2500 ? 5 : 0;
+   return Math.max(55,Math.min(98,score));
+ }
  let score=58;
  const heat=selected("heat"),cold=selected("cold"),type=selected("type"),air=selected("air"),mood=selected("mood"),price=selected("price"),loyly=selected("löyly");
  if(heat!=="こだわらない" && f.heat!=null){
