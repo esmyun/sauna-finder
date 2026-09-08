@@ -1,13 +1,1 @@
-# サウナファインダー — 施設検索版
-
-Web検索から「実在するサウナ施設」を優先して抽出するMVPです。
-
-- 記事・ランキング・まとめページを施設名として採用しない
-- 住所・営業時間・料金・アクセス等の施設情報を複数確認できた候補だけ表示
-- 施設名を確定できない候補は表示しない
-- Googleマップは確定した施設名を検索
-- `TAVILY_API_KEY` はVercelの環境変数で管理
-
-## Vercel
-
-`/api/search.js` がTavily Search APIを呼び出します。
+# Sauna Finder API update\n\nReplace `api/search.js` with this version. Keep your existing `index.html` unchanged.\n
