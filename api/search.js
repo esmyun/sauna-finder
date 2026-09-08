@@ -56,13 +56,11 @@ function cleanTitle(title) {
 function verifyFacilityCandidate(title, content, url) {
   const rawTitle = String(title).replace(/\s+/g, ' ').trim();
   const text = `${rawTitle}\n${content}`;
-  const badTitle = /(\d+選|ランキング|まとめ|おすすめ|編集部|ユーザーが選んだ|特集|徹底解説|完全ガイド|一覧|比較|紹介|人気|ベスト|TOP\s*\d+|サウナ施設\s*\d*選|個性派サウナ)/i;
+  const genericTitle = /(\d+\s*(選|件)|ランキング|まとめ|おすすめ|編集部|ユーザーが選んだ|特集|徹底解説|完全ガイド|一覧|比較|紹介|人気|ベスト|TOP\s*\d+|個性派|外気浴ができる|サウナ施設|サウナスポット|東京の|都内の|関東の|全国の|〜できる|できるサウナ)/i;
   const badUrl = /(\/category\/|\/ranking\/|\/feature\/|\/column\/|\/magazine\/|\/news\/|\/blog\/|\/articles?\/|\/matome\/)/i;
+  if (!rawTitle || rawTitle.length < 2 || rawTitle.length > 60) return null;
+  if (genericTitle.test(rawTitle) || badUrl.test(url)) return null;
 
-  if (!rawTitle || rawTitle.length < 2 || rawTitle.length > 55) return null;
-  if (badTitle.test(rawTitle) || badUrl.test(url)) return null;
-
-  // 施設ページにありがちな「住所・営業時間・料金・アクセス」等の実在情報。
   const signals = [
     /住所|所在地|〒\s*\d{3}-?\d{4}/i,
     /営業時間|営業日|定休日|\d{1,2}:\d{2}/i,
@@ -72,29 +70,38 @@ function verifyFacilityCandidate(title, content, url) {
     /サウナ|水風呂|外気浴|ロウリュ/i
   ];
   const signalCount = signals.filter(re => re.test(text)).length;
-  if (signalCount < 3) return null;
+  if (signalCount < 4) return null;
 
-  let name = extractNameFromFacilityTitle(rawTitle);
-  if (!name) {
-    // タイトルだけで施設名を確定できない場合は本文の「施設名/店舗名/店名」表記を優先。
-    for (const re of [
-      /(?:施設名|店舗名|店名)\s*[:：]\s*([^\n。]{2,45})/i,
-      /(?:施設名|店舗名|店名)\s*\n\s*([^\n]{2,45})/i
-    ]) {
-      const m = content.match(re);
-      if (m && isPlausibleFacilityName(m[1])) { name = m[1].trim(); break; }
-    }
+  let name = '';
+  // 本文に明示された施設名を最優先。検索記事から拾う場合もここで施設名らしさを確認。
+  for (const re of [
+    /(?:施設名|店舗名|店名|店名は)\s*[:：]?\s*([^\n。|｜]{2,45})/i,
+    /(?:施設名|店舗名|店名)\s*\n\s*([^\n]{2,45})/i
+  ]) {
+    const m = content.match(re);
+    if (m && isPlausibleFacilityName(m[1])) { name = m[1].trim(); break; }
   }
 
-  if (!name) return null;
-  if (!isPlausibleFacilityName(name)) return null;
+  // 施設ページ自身のタイトルだけを候補にする。一般記事タイトルは絶対に採用しない。
+  if (!name && looksLikeFacilityPageTitle(rawTitle)) name = extractNameFromFacilityTitle(rawTitle);
+  if (!name || !isPlausibleFacilityName(name)) return null;
 
-  // 英数字だけの一般語は、施設ページとして明確に確認できる場合以外は除外。
-  const latinOnly = /^[A-Za-z0-9 .&'’_\-]+$/.test(name);
+  // 施設名が本文にも現れることを要求（タイトルだけの推測を防ぐ）。
   const nameMentioned = new RegExp(escapeRegExp(name), 'i').test(content);
-  if (latinOnly && (!nameMentioned || signalCount < 4)) return null;
+  if (!nameMentioned && signalCount < 5) return null;
+
+  // 「サウナ」等の一般語だけ、検索条件そのもの、件数表現を除外。
+  if (/^(東京|東京都|都内|関東|全国)?の?(外気浴|サウナ|水風呂|サウナ施設|サウナスポット)(が|の)?(できる|ある)?$/i.test(name)) return null;
+  if (/\d+\s*(選|件)/i.test(name)) return null;
 
   return { name: name.replace(/\s{2,}/g, ' ').trim() };
+}
+
+function looksLikeFacilityPageTitle(title) {
+  const t = String(title).replace(/\s+/g, ' ').trim();
+  if (!t || /(\d+\s*(選|件)|ランキング|まとめ|おすすめ|編集部|特集|一覧|比較|紹介|人気|TOP\s*\d+|外気浴ができる|東京の|都内の|関東の|全国の|〜できる|できるサウナ)/i.test(t)) return false;
+  // 施設名として使える強い語を含み、タイトルが短めなら採用。
+  return /サウナ|SAUNA|スパ|SPA|銭湯|温浴|温泉|浴場|おふろ|湯|カプセル|ホテル/i.test(t) && t.length <= 45;
 }
 
 function extractNameFromFacilityTitle(title) {
