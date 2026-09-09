@@ -15,7 +15,7 @@ export default async function handler(req, res) {
     // 料金情報を取りに行く検索を独立させる。
     // 「最初に見つかった○○円」を料金として採用しない。
     const queries = [
-      `${query} サウナ施設 公式サイト 料金 60分 90分 120分 入館料 サウナ料金`,
+      `${query} 実在するサウナ施設 公式サイト 料金 60分 90分 120分 入館料 サウナ料金`,
       `${query} サウナ 施設名 公式 住所 料金表 利用時間 水風呂 外気浴`,
       `${query} サウナ店 公式 料金 通常料金 一般 1時間 90分 2時間`,
       `${query} サウナ施設 公式 料金表 入浴料 サウナ利用料`
@@ -123,23 +123,42 @@ function detectPriceLimit(query) {
 
 function detectArea(query) {
   const q = String(query);
-  if (/東京23区外|東京都下|多摩/.test(q)) return 'tokyoOutside23';
-  if (/東京23区|東京都23区|23区/.test(q)) return 'tokyo23';
-  if (/神奈川|横浜|川崎/.test(q)) return 'kanagawa';
-  if (/埼玉/.test(q)) return 'saitama';
-  if (/千葉/.test(q)) return 'chiba';
+  // 小枠（区・市区町村）が指定されていれば最優先
+  const wardMap = {
+    '千代田':'千代田区','中央':'中央区','港':'港区','新宿':'新宿区','文京':'文京区','台東':'台東区','墨田':'墨田区','江東':'江東区','品川':'品川区','目黒':'目黒区','大田':'大田区','世田谷':'世田谷区','渋谷':'渋谷区','中野':'中野区','杉並':'杉並区','豊島':'豊島区','北':'北区','荒川':'荒川区','板橋':'板橋区','練馬':'練馬区','足立':'足立区','葛飾':'葛飾区','江戸川':'江戸川区'
+  };
+  for (const [key, ward] of Object.entries(wardMap)) {
+    if (new RegExp(`(?:小枠|区|${key})`).test(q) && q.includes(ward.replace('区',''))) {
+      return {kind:'ward', name:ward, prefecture:'東京都'};
+    }
+  }
+
+  const middle = [
+    {name:'都心', wards:['千代田区','中央区','港区']},
+    {name:'城南', wards:['品川区','目黒区','大田区','世田谷区']},
+    {name:'城西', wards:['新宿区','渋谷区','中野区','杉並区']},
+    {name:'城北', wards:['豊島区','北区','板橋区','練馬区']},
+    {name:'城東', wards:['台東区','文京区','墨田区','江東区','荒川区','足立区','葛飾区','江戸川区']}
+  ];
+  for (const m of middle) if (q.includes(`中枠:${m.name}`) || q.includes(`中枠 ${m.name}`) || q.includes(m.name)) return {kind:'middle', name:m.name, prefecture:'東京都', wards:m.wards};
+
+  if (/東京23区外|東京都下|多摩/.test(q)) return {kind:'tokyoOutside23', name:'東京23区外', prefecture:'東京都'};
+  if (/東京23区|東京都23区|23区/.test(q)) return {kind:'tokyo23', name:'東京23区', prefecture:'東京都'};
+  if (/神奈川|横浜|川崎/.test(q)) return {kind:'prefecture', name:'神奈川', prefecture:'神奈川県'};
+  if (/埼玉/.test(q)) return {kind:'prefecture', name:'埼玉', prefecture:'埼玉県'};
+  if (/千葉/.test(q)) return {kind:'prefecture', name:'千葉', prefecture:'千葉県'};
   return null;
 }
 
 function matchesArea(address, area) {
   const a = String(address || '');
   const wards = /(千代田|中央|港|新宿|文京|台東|墨田|江東|品川|目黒|大田|世田谷|渋谷|中野|杉並|豊島|北区|荒川|板橋|練馬|足立|葛飾|江戸川)/;
-
-  if (area === 'tokyo23') return /東京都/.test(a) && wards.test(a);
-  if (area === 'tokyoOutside23') return /東京都/.test(a) && !wards.test(a);
-  if (area === 'kanagawa') return /神奈川県/.test(a);
-  if (area === 'saitama') return /埼玉県/.test(a);
-  if (area === 'chiba') return /千葉県/.test(a);
+  if (!area) return true;
+  if (area.kind === 'ward') return a.includes(area.prefecture) && a.includes(area.name);
+  if (area.kind === 'middle') return a.includes(area.prefecture) && area.wards.some(w => a.includes(w));
+  if (area.kind === 'tokyo23') return /東京都/.test(a) && wards.test(a);
+  if (area.kind === 'tokyoOutside23') return /東京都/.test(a) && !wards.test(a);
+  if (area.kind === 'prefecture') return a.includes(area.prefecture);
   return true;
 }
 
